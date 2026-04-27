@@ -85,5 +85,57 @@
       }
     };
   </script>
+  <script>
+    // 1. Fungsi untuk menghancurkan tampilan dan memunculkan peringatan
+    function triggerIllegalAccess() {
+        document.body.innerHTML = `
+            <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; width:100vw; background-color:#b91c1c; color:white; font-family:sans-serif; text-align:center; z-index:9999; position:fixed; top:0; left:0;">
+                <h1 style="font-size:3rem; margin-bottom:10px;">🛑 ILLEGAL ACCESS 🛑</h1>
+                <p style="font-size:1.5rem;">Sistem mendeteksi upaya pembukaan Developer Tools.</p>
+                <p>Harap tutup panel tersebut dan muat ulang (refresh) halaman ini.</p>
+            </div>
+        `;
+    }
+
+    // 2. Jebakan Debugger (Membuat browser freeze saat Inspect dibuka)
+    // Skrip ini akan terus-menerus memicu jeda jika DevTools terbuka
+    setInterval(function() {
+        const start = performance.now();
+        debugger; // Titik henti paksa
+        const end = performance.now();
+        
+        // Jika jeda eksekusi lebih dari 100ms, berarti DevTools sedang terbuka
+        if (end - start > 100) {
+            triggerIllegalAccess();
+        }
+    }, 1000);
+
+    // 3. Jebakan Deteksi Resolusi (Jika DevTools di-dock ke samping/bawah layar)
+    window.addEventListener('resize', function() {
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+        
+        // Ambang batas toleransi ukuran UI browser standar adalah sekitar 160px
+        if (widthDiff > 160 || heightDiff > 160) {
+            triggerIllegalAccess();
+        }
+    });
+
+    // 4. Mencegah Klik Kanan (Kode Anda Sebelumnya)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // 5. Mencegah Shortcut Keyboard (Kode Anda Sebelumnya)
+    document.onkeydown = function(e) {
+        if (e.keyCode === 123) return false; // F12
+        if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false; // Ctrl+Shift+I/J/C
+        if (e.ctrlKey && e.keyCode === 85) return false; // Ctrl+U
+        if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 80)) { // Ctrl+S / Ctrl+P
+            e.preventDefault();
+            return false;
+        }
+    };
+</script>
 </body>
 </html>
