@@ -24,6 +24,11 @@
       height: 100%;
       background-color: #eee;
       overflow: hidden; /* Mencegah scroll ganda */
+      
+      /* Mencegah seleksi/blok teks */
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     .iframe-container {
@@ -52,5 +57,33 @@
       allow="fullscreen; camera; microphone; display-capture; geolocation;">
     </iframe>
   </div>
+
+  <script>
+    // 1. Mencegah Klik Kanan
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // 2. Mencegah Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
+    document.onkeydown = function(e) {
+      // F12
+      if (e.keyCode === 123) {
+        return false;
+      }
+      // Ctrl+Shift+I (Inspect) atau Ctrl+Shift+J (Console)
+      if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) {
+        return false;
+      }
+      // Ctrl+U (View Source)
+      if (e.ctrlKey && e.keyCode === 85) {
+        return false;
+      }
+      // Ctrl+S (Save) atau Ctrl+P (Print)
+      if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 80)) {
+        e.preventDefault();
+        return false;
+      }
+    };
+  </script>
 </body>
 </html>
