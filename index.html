@@ -59,12 +59,12 @@
   </div>
 
   <script>
-    // 1. Mencegah Klik Kanan
+    // 1. Cegah Klik Kanan
     document.addEventListener('contextmenu', function(e) {
       e.preventDefault();
     });
 
-    // 2. Mencegah Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
+    // 2. Cegah Shortcut Keyboard (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
     document.onkeydown = function(e) {
       // F12
       if (e.keyCode === 123) {
